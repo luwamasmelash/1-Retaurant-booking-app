@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { Restaurant } from '../models/Restaurant.js';
 import jwt from 'jsonwebtoken' 
 import { User } from "../models/User.js";             
-// import { Booking } from "../models/Booking.js";       
+import { Booking } from "../models/Booking.js";       
 
 export const getRestaurants = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -139,7 +139,7 @@ export const getRestaurantAvailability = async (req: Request, res: Response): Pr
     // Calculate dynamic seat availability for each slot
     const availability = restaurant.availableSlots.map((slot) => {
       const totalBookedGuests = existingBookings
-        .filter((b) => b.slot === slot)
+        .filter((b) => b.time === slot)
         .reduce((sum, b) => sum + b.guests, 0);
 
       const remainingSeats = Math.max(0, restaurant.totalSeats - totalBookedGuests);

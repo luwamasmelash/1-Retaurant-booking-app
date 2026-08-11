@@ -99,14 +99,14 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
 };
 
 export const getMe = async (req: AuthRequest, res: Response): Promise<void> => {
-    try {
-        if(!req.user) {
-            res.status(401).json({ message: 'Not authorized' })
-            return
-        }
-        res.json(req.user)
-    } catch (error: any) {
-        console.log('Error in getMe controller', error)
-        res.status(400).json({ message: error.message })
+  try {
+    if (!req.user) {
+      res.status(401).json({ message: 'Not authorized' })
+      return
     }
+    res.json(req.user)
+  } catch (error: any) {
+    console.log('Error in getMe controller', error)
+    res.status(400).json({ message: error.message })
+  }
 }

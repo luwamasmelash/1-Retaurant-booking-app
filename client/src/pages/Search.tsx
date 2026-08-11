@@ -7,6 +7,8 @@ import RestaurantCard from "../components/RestaurantCard.tsx";
 import AuthModal from "../components/AuthModal.tsx";
 import { SlidersHorizontal, Search as SearchIcon, X, Check, MapPin, SearchXIcon } from "lucide-react";
 import { dummyRestaurant } from "../assets/assets.ts";
+import api from "../lib/api.ts";
+import toast from "react-hot-toast";
 
 export default function Search() {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -28,7 +30,6 @@ export default function Search() {
     const [tempLocation, setTempLocation] = useState(locationVal);
 
     useEffect(() => {
-        // Sync inputs with URL params on navigation
         (() => {
             setTempSearch(searchVal);
             setTempLocation(locationVal);
@@ -37,8 +38,23 @@ export default function Search() {
 
     useEffect(() => {
         const fetchRestaurants = async () => {
-            setRestaurants(dummyRestaurant);
-            setLoading(false);
+            try {
+                setLoading(true);
+
+                const res = await api.get(
+                    `/restaurants?${searchParams.toString()}`
+                );
+
+                setRestaurants(res.data);
+            } catch (error: any) {
+                toast.error(
+                    error?.response?.data?.message ||
+                    error?.message ||
+                    "Failed to fetch restaurants"
+                );
+            } finally {
+                setLoading(false);
+            }
         };
 
         fetchRestaurants();
@@ -182,9 +198,8 @@ export default function Search() {
                                         >
                                             <span>{c}</span>
                                             <div
-                                                className={`w-4 h-4 border rounded-sm flex items-center justify-center transition-colors ${
-                                                    active ? "bg-primary border-primary text-white" : "border-outline-variant"
-                                                }`}
+                                                className={`w-4 h-4 border rounded-sm flex items-center justify-center transition-colors ${active ? "bg-primary border-primary text-white" : "border-outline-variant"
+                                                    }`}
                                             >
                                                 {active && <Check size={10} />}
                                             </div>
@@ -204,11 +219,10 @@ export default function Search() {
                                         <button
                                             key={p}
                                             onClick={() => handlePriceToggle(p)}
-                                            className={`py-2 text-center text-xs transition-colors cursor-pointer border rounded-sm ${
-                                                active
-                                                    ? "bg-primary border-primary text-white"
-                                                    : "border-outline-variant/50 text-on-surface hover:border-primary"
-                                            }`}
+                                            className={`py-2 text-center text-xs transition-colors cursor-pointer border rounded-sm ${active
+                                                ? "bg-primary border-primary text-white"
+                                                : "border-outline-variant/50 text-on-surface hover:border-primary"
+                                                }`}
                                         >
                                             {p}
                                         </button>
@@ -300,9 +314,8 @@ export default function Search() {
                                             >
                                                 <span>{c}</span>
                                                 <div
-                                                    className={`w-4 h-4 border rounded-sm flex items-center justify-center ${
-                                                        active ? "bg-primary border-primary text-white" : "border-outline-variant"
-                                                    }`}
+                                                    className={`w-4 h-4 border rounded-sm flex items-center justify-center ${active ? "bg-primary border-primary text-white" : "border-outline-variant"
+                                                        }`}
                                                 >
                                                     {active && <Check size={10} />}
                                                 </div>
@@ -322,11 +335,10 @@ export default function Search() {
                                             <button
                                                 key={p}
                                                 onClick={() => handlePriceToggle(p)}
-                                                className={`py-2 text-center text-xs font-medium transition-colors cursor-pointer border rounded-sm ${
-                                                    active
-                                                        ? "bg-primary border-primary text-white"
-                                                        : "border-outline-variant/50 text-on-surface hover:border-primary"
-                                                }`}
+                                                className={`py-2 text-center text-xs font-medium transition-colors cursor-pointer border rounded-sm ${active
+                                                    ? "bg-primary border-primary text-white"
+                                                    : "border-outline-variant/50 text-on-surface hover:border-primary"
+                                                    }`}
                                             >
                                                 {p}
                                             </button>

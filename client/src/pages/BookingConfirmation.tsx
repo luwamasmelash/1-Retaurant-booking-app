@@ -46,24 +46,7 @@ export default function BookingConfirmation() {
         }
     }, [user]);
 
-    useEffect(() => {
-        const fetchRestaurant = async () => {
-            try {
-                setLoading(true)
-                const res = await api.get(`/restaurants/${slug}`)
-                setRestaurant(res.data)
-            } catch (error: any) {
-                toast.error(error?.response?.data?.message || error?.message);
-                navigate('/')
-            } finally {
-                setLoading(false)
-            }
-        };
-
-        if (slug) {
-            fetchRestaurant();
-        }
-    }, [slug, navigate]);
+   
 
     if (loading) {
         return <Loader text="Retrieving Dining Details..." />;
